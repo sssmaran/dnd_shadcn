@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import BookSearch from "./components/BookSearch";
-import { Book, BookSearch } from "./components/BookSearch";
+import { Book } from "./components/BookSearch";
 
 const App = () => {
   const [books, setBooks] = useState<Book[]>([]);
@@ -11,9 +11,14 @@ const App = () => {
       setBooks(JSON.parse(storedBooks));
     }
   }, []);
+  const addBook = (newBook: Book) => {
+    const updatedBooks: Book[] = [...books, { ...newBook, status: "backlog" }];
+    setBooks(updatedBooks);
+    localStorage.setItem("readingList", JSON.stringify(updatedBooks));
+  };
   return (
     <div className="container mx-auto">
-      <BookSearch />
+      <BookSearch onAddBook={addBook} />
     </div>
   );
 };

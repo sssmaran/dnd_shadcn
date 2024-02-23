@@ -17,11 +17,11 @@ export type Book = {
   title: string;
   author_name: string;
   first_publish_year: string;
-  number_of_pages_median: string;
+  number_of_pages_median: string | null;
   status: "done" | "inProgress" | "backlog";
 };
 
-const BookSearch = () => {
+const BookSearch = ({ onAddbook }: { onAddBook: (book: Book) => void }) => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -68,6 +68,9 @@ const BookSearch = () => {
     }
   };
 
+  const startIndex = (currentPage - 1) * resultsPerPage + 1;
+  const endIndex = Math.min(startIndex + resultsPerPage - 1, totalResults);
+
   return (
     <div className="p-4">
       <div className="sm:max-w-xs">
@@ -86,6 +89,13 @@ const BookSearch = () => {
       >
         {isLoading ? "Searching..." : "Search"}
       </Button>
+      <div className="mt-2">
+        {totalResults > 0 && (
+          <p className="text-sm">
+            Showing {startIndex}-{endIndex} out of {totalResults} results
+          </p>
+        )}
+      </div>
       <div className="mt-4 max-h-64 overflow-auto">
         <Table>
           <TableHeader>
@@ -103,6 +113,23 @@ const BookSearch = () => {
                 <TableCell>{book.author_name}</TableCell>
                 <TableCell>{book.first_publish_year}</TableCell>
                 <TableCell>{book.numbers_of_pages_median || "-"}</TableCell>
+                <TableCell>
+                  <Button
+                    varinat="link"
+                    onClick={() => {
+                      onAddbook({
+                        key: book.key,
+                        title: book.title,
+                        author_name: book.author_name,
+                        first_publish_year: book.first_publish_year,
+                        number_of_pages_median: book.number_of_pages_median,
+                        status: "backlog",
+                      });
+                    }}
+                  >
+                    Add
+                  </Button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
