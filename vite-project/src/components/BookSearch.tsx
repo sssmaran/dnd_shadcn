@@ -15,15 +15,15 @@ import {
 export type Book = {
   key: string;
   title: string;
-  author_name: string;
+  author_name: string[];
   first_publish_year: string;
   number_of_pages_median: string | null;
   status: "done" | "inProgress" | "backlog";
 };
 
-const BookSearch = ({ onAddbook }: { onAddBook: (book: Book) => void }) => {
+const BookSearch = ({ onAddBook }: { onAddBook: (book: Book) => void }) => {
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<any[]>([]);
+  const [results, setResults] = useState<Book[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [totalResults, setTotalResults] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -112,17 +112,18 @@ const BookSearch = ({ onAddbook }: { onAddBook: (book: Book) => void }) => {
                 <TableCell>{book.title}</TableCell>
                 <TableCell>{book.author_name}</TableCell>
                 <TableCell>{book.first_publish_year}</TableCell>
-                <TableCell>{book.numbers_of_pages_median || "-"}</TableCell>
+                <TableCell>{book.number_of_pages_median || "-"}</TableCell>
                 <TableCell>
                   <Button
-                    varinat="link"
+                    variant="link"
                     onClick={() => {
-                      onAddbook({
+                      onAddBook({
                         key: book.key,
                         title: book.title,
                         author_name: book.author_name,
                         first_publish_year: book.first_publish_year,
-                        number_of_pages_median: book.number_of_pages_median,
+                        number_of_pages_median:
+                          book.number_of_pages_median || null,
                         status: "backlog",
                       });
                     }}
