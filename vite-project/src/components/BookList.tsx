@@ -1,5 +1,4 @@
 import React from "react";
-import { Book } from "./BookSearch";
 import {
   Card,
   CardDescription,
@@ -8,18 +7,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "./ui/button";
+import { useStore, Book } from "@/store";
 
-const BookList = ({
-  books,
-  onMoveBook,
-  onRemoveBook,
-}: {
-  books: Book[];
-  onMoveBook: (book: Book, targetList: Book["status"]) => void;
-  onRemoveBook: (book: Book) => void;
-}) => {
+const BookList = () => {
+  const { books, removeBook, moveBook } = useStore((state) => state);
+
   const moveToList = (book: Book, targetList: Book["status"]) => {
-    onMoveBook(book, targetList);
+    moveBook(book, targetList);
   };
   const renderBookItem = (book: Book, index: number, listType: string) => (
     <Card key={index}>
@@ -28,7 +22,7 @@ const BookList = ({
         <CardDescription>{book.author_name}</CardDescription>
       </CardHeader>
       <CardFooter className="flex justify-between">
-        <Button variant="destructive" onClick={() => onRemoveBook(book)}>
+        <Button variant="destructive" onClick={() => removeBook(book)}>
           Remove
         </Button>
         <div className="inline-flex gap-2">
