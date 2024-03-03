@@ -16,7 +16,7 @@ const BookList = () => {
     moveBook(book, targetList);
   };
   const renderBookItem = (book: Book, index: number, listType: string) => (
-    <Card key={index}>
+    <Card key={index} className="mb-2">
       <CardHeader>
         <CardTitle>{book.title}</CardTitle>
         <CardDescription>{book.author_name}</CardDescription>
